@@ -45,12 +45,13 @@ export class DeserializerUtils {
       relation: relationshipName
     };
 
-    // Check if the include is already processed (prevent circular references).
-    if (_.find(this.alreadyIncluded, includedObject)) {
-      return null;
-    } else {
-      this.alreadyIncluded.push(includedObject);
-    }
+    // TODO Check if the include is already processed (prevent circular references).
+    // Take into account the case when dependent object is included in multiple parent objects.
+    // if (_.find(this.alreadyIncluded, includedObject)) {
+    //   return null;
+    // } else {
+    //   this.alreadyIncluded.push(includedObject);
+    // }
 
 
     if (included) {
