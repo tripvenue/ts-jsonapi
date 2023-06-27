@@ -803,14 +803,7 @@ describe('JSON API Deserializer', function () {
         country: {
           country: 'USA',
           id: '54735722e16609ba1eee36af',
-          address: {
-            address_line1: '406 Madison Court',
-            zip_code: '49426',
-            id: '54735722e16620ba1eee36af',
-            country: {
-              id: "54735722e16609ba1eee36af"
-            }
-          }
+          address: json[0].address
         }
       });
     });

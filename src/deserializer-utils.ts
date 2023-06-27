@@ -9,7 +9,7 @@ export class DeserializerUtils {
     public opts: any
   ){}
 
-  private alreadyIncluded: any[] = [];
+  private extractedObjects: any = {};
 
   private isComplexType(obj: any) {
     return _.isArray(obj) || _.isPlainObject(obj);
@@ -28,7 +28,7 @@ export class DeserializerUtils {
     }
   }
 
-  private findIncluded(relationshipData: any, relationshipName: any, from: any) {
+  private findIncluded(relationshipData: any) {
     if (!this.jsonapi.included || !relationshipData) {
       return null;
     }
@@ -38,26 +38,16 @@ export class DeserializerUtils {
       type: relationshipData.type
     });
 
-    var includedObject = {
-      to: {
-        id: from.id,
-        type: from.type
-      },
-      from: Object.assign({}, relationshipData),
-      relation: relationshipName
-    };
-
-    // TODO Check if the include is already processed (prevent circular references).
-    // Take into account the case when dependent object is included in multiple parent objects.
-    // if (_.find(this.alreadyIncluded, includedObject)) {
-    //   return null;
-    // } else {
-    //   this.alreadyIncluded.push(includedObject);
-    // }
-
-
     if (included) {
-      return _.extend(this.extractAttributes(included), this.extractRelationships(included));
+      const relationshipKey = `${relationshipData.type}:${relationshipData.id}`;
+
+      if (!this.extractedObjects.hasOwnProperty(relationshipKey)) {
+        let attributes = this.extractAttributes(included);
+        this.extractedObjects[relationshipKey] = attributes;
+        _.extend(attributes, this.extractRelationships(included));
+      }
+
+      return this.extractedObjects[relationshipKey];
     } else {
       return null;
     }
@@ -86,13 +76,13 @@ export class DeserializerUtils {
         } else if (_.isArray(relationship.data)) {
           let includes = relationship.data
             .map((relationshipData: Array<any>) => {
-              return this.extractIncludes(relationshipData, key, from);
+              return this.extractIncludes(relationshipData);
             });
           if (includes) {
               dest[this.keyForAttribute(key)] = includes;
           }
         } else {
-          let includes = this.extractIncludes(relationship.data, key, from)
+          let includes = this.extractIncludes(relationship.data)
           if (includes) {
             return dest[this.keyForAttribute(key)] = includes;
           }
@@ -127,10 +117,9 @@ export class DeserializerUtils {
     }
   }
 
-  private extractIncludes(relationshipData: any, relationshipName: any, from: any) {
-    let included = this.findIncluded(relationshipData, relationshipName, from)
-    let valueForRelationship = this.getValueForRelationship(relationshipData, included);
-    return valueForRelationship;
+  private extractIncludes(relationshipData: any) {
+    let included = this.findIncluded(relationshipData)
+    return this.getValueForRelationship(relationshipData, included);
   }
 
   perform(): any {
