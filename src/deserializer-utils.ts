@@ -58,6 +58,9 @@ export class DeserializerUtils {
     if ('id' in from) {
       dest.id = from.id;
     }
+    if ('type' in from) {
+      dest.type = from.type;
+    }
 
     return dest;
   }
