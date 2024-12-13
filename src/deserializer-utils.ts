@@ -22,7 +22,7 @@ export class DeserializerUtils {
 
       return valueForRelationshipFct(relationshipData, included);
     } else if (!included && relationshipData) {
-        return {id: relationshipData.id}
+        return {id: relationshipData.id, type: relationshipData.type}
     } else {
       return included;
     }
