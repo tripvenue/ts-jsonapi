@@ -24,11 +24,13 @@ describe('JSON API Deserializer', function () {
       expect(json).to.be.an('array').with.length(2);
       expect(json[0]).to.be.eql({
         id: '54735750e16638ba1eee59cb',
+        type: 'users',
         'first-name': 'Sandro',
         'last-name': 'Munda'
       });
       expect(json[1]).to.be.eql({
         id: '5490143e69e49d0c8f9fc6bc',
+        type: 'users',
         'first-name': 'Lawrence',
         'last-name': 'Bennett'
       });
@@ -50,6 +52,7 @@ describe('JSON API Deserializer', function () {
       var json = new JSONAPIDeserializer().deserialize(dataSet);
       expect(json).to.be.eql({
         id: '54735750e16638ba1eee59cb',
+        type: 'users',
         'first-name': 'Sandro',
         'last-name': 'Munda'
       });
@@ -71,6 +74,7 @@ describe('JSON API Deserializer', function () {
       }).deserialize(dataSet);
       expect(json).to.be.eql({
         id: '54735750e16638ba1eee59cb',
+        type: 'users',
         firstName: 'Sandro',
         lastName: 'Munda'
       });
@@ -117,7 +121,7 @@ describe('JSON API Deserializer', function () {
       var json = new JSONAPIDeserializer({ keyForAttribute: 'camelCase' }).deserialize(dataSet);
       expect(json).to.be.an('array').with.length(2);
 
-      expect(json[0]).to.have.key('id', 'firstName', 'lastName', 'books');
+      expect(json[0]).to.have.key('id', 'type', 'firstName', 'lastName', 'books');
       expect(json[0].books).to.be.an('array');
       expect(json[0].books[0]).to.be.eql({
         bookTitle: 'Tesla, SpaceX.',
@@ -128,7 +132,7 @@ describe('JSON API Deserializer', function () {
         isbn: '978-1451648546'
       });
 
-      expect(json[1]).to.have.key('id', 'firstName', 'lastName',
+      expect(json[1]).to.have.key('id', 'type', 'firstName', 'lastName',
         'books');
       done(null, json);
     });
@@ -184,21 +188,23 @@ describe('JSON API Deserializer', function () {
       var json = new JSONAPIDeserializer().deserialize(dataSet);
       expect(json).to.be.an('array').with.length(2);
 
-      expect(json[0]).to.have.key('id', 'first-name', 'last-name',
+      expect(json[0]).to.have.key('id', 'type', 'first-name', 'last-name',
         'address');
 
       expect(json[0].address).to.be.eql({
         id: '54735722e16620ba1eee36af',
+        type: 'addresses',
         'address-line1': '406 Madison Court',
         'zip-code': '49426',
         country: 'USA'
       });
 
-      expect(json[1]).to.have.key('id', 'first-name', 'last-name',
+      expect(json[1]).to.have.key('id', 'type', 'first-name', 'last-name',
         'address');
 
       expect(json[1].address).to.be.eql({
         id: '54735697e16624ba1eee36bf',
+        type: 'addresses',
         'address-line1': '361 Shady Lane',
         'zip-code': '23185',
         country: 'USA'
@@ -256,21 +262,23 @@ describe('JSON API Deserializer', function () {
       var json = new JSONAPIDeserializer({keyForAttribute: 'camelCase'}).deserialize(dataSet);
       expect(json).to.be.an('array').with.length(2);
 
-      expect(json[0]).to.have.key('id', 'firstName', 'lastName',
+      expect(json[0]).to.have.key('id', 'type', 'firstName', 'lastName',
         'myAddress');
 
       expect(json[0].myAddress).to.be.eql({
         id: '54735722e16620ba1eee36af',
+        type: 'addresses',
         addressLine1: '406 Madison Court',
         zipCode: '49426',
         country: 'USA'
       });
 
-      expect(json[1]).to.have.key('id', 'firstName', 'lastName',
+      expect(json[1]).to.have.key('id', 'type', 'firstName', 'lastName',
         'myAddress');
 
       expect(json[1].myAddress).to.be.eql({
         id: '54735697e16624ba1eee36bf',
+        type: 'addresses',
         addressLine1: '361 Shady Lane',
         zipCode: '23185',
         country: 'USA'
@@ -354,30 +362,34 @@ describe('JSON API Deserializer', function () {
         var json = new JSONAPIDeserializer().deserialize(dataSet);
         expect(json).to.be.an('array').with.length(2);
 
-        expect(json[0]).to.have.key('id', 'first-name', 'last-name','address');
+        expect(json[0]).to.have.key('id', 'type', 'first-name', 'last-name','address');
 
         expect(json[0].address).to.be.eql({
           'address-line1': '406 Madison Court',
           'zip-code': '49426',
           country: 'USA',
           id: '54735722e16620ba1eee36af',
+          type: 'addresses',
           lock: {
+            type: 'lock',
             id: '1',
             'secret-key': 'S*7v0oMf7YxCtFyA$ffy',
           key: {
+            type: 'key',
             id: '1',
             'public-key': '1*waZCXVE*XXpn*Izc%t'
           }
         }});
 
-        expect(json[1]).to.have.key('id', 'first-name', 'last-name', 'address');
+        expect(json[1]).to.have.key('id', 'type', 'first-name', 'last-name', 'address');
 
         expect(json[1].address).to.be.eql({
           id: '54735697e16624ba1eee36bf',
+          type: 'addresses',
           'address-line1': '361 Shady Lane',
           'zip-code': '23185',
           country: 'USA',
-          lock: {id: "2"}
+          lock: {id: "2", type: "lock"}
         });
 
         done();
@@ -451,7 +463,7 @@ describe('JSON API Deserializer', function () {
         var json = new JSONAPIDeserializer().deserialize(dataSet);
         expect(json).to.be.an('array').with.length(2);
 
-        expect(json[0]).to.have.key('id', 'first-name', 'last-name',
+        expect(json[0]).to.have.key('id', 'type', 'first-name', 'last-name',
           'address');
 
         expect(json[0].address).to.be.eql({
@@ -459,17 +471,19 @@ describe('JSON API Deserializer', function () {
           'zip-code': '49426',
           country: 'USA',
           id: '54735722e16620ba1eee36af',
+          type: 'addresses',
           locks: [
-            { 'secret-key': 'S*7v0oMf7YxCtFyA$ffy', id: '1' },
-            { 'secret-key': 'En8zd6ZT6#q&Fz^EwGMy', id: '2' }
+            { 'secret-key': 'S*7v0oMf7YxCtFyA$ffy', type: 'lock', id: '1' },
+            { 'secret-key': 'En8zd6ZT6#q&Fz^EwGMy', type: 'lock', id: '2' }
           ]
         });
 
-        expect(json[1]).to.have.key('id', 'first-name', 'last-name',
+        expect(json[1]).to.have.key('id', 'type', 'first-name', 'last-name',
           'address');
 
         expect(json[1].address).to.be.eql({
           id: '54735697e16624ba1eee36bf',
+          type: 'addresses',
           'address-line1': '361 Shady Lane',
           'zip-code': '23185',
           country: 'USA'
@@ -524,7 +538,7 @@ describe('JSON API Deserializer', function () {
 
         expect(json).to.be.an('array').with.length(2);
 
-        expect(json[0]).to.have.key('id', 'first-name', 'last-name',
+        expect(json[0]).to.have.key('id', 'type', 'first-name', 'last-name',
           'address');
 
         expect(json[0].address).to.be.eql({
@@ -534,7 +548,7 @@ describe('JSON API Deserializer', function () {
           country: 'USA'
         });
 
-        expect(json[1]).to.have.key('id', 'first-name', 'last-name',
+        expect(json[1]).to.have.key('id', 'type', 'first-name', 'last-name',
           'address');
 
         expect(json[1].address).to.be.eql({
@@ -567,8 +581,9 @@ describe('JSON API Deserializer', function () {
         var json = new JSONAPIDeserializer().deserialize(dataSet);
 
         expect(json).to.be.an('array').with.length(1);
-        expect(json[0]).to.have.key('id', 'first-name', 'last-name', 'address');
+        expect(json[0]).to.have.key('id', 'type', 'first-name', 'last-name', 'address');
         expect(json[0].address).to.be.eql({
+          type: 'address',
           id: '66635722e16620ba1eee36af'
         });
 
@@ -595,6 +610,7 @@ describe('JSON API Deserializer', function () {
         var json = new JSONAPIDeserializer().deserialize(dataSet);
         expect(json).eql({
           id: '54735750e16638ba1eee59cb',
+          type: 'users',
           'first-name': 'Sandro',
           'last-name': 'Munda',
           'address': null
@@ -620,6 +636,7 @@ describe('JSON API Deserializer', function () {
         var json = new JSONAPIDeserializer().deserialize(dataSet);
         expect(json).eql({
           id: '54735750e16638ba1eee59cb',
+          type: 'users',
           'first-name': 'Sandro',
           'last-name': 'Munda',
           'addresses': []
@@ -668,10 +685,12 @@ describe('JSON API Deserializer', function () {
         var json = new JSONAPIDeserializer().deserialize(dataSet);
         expect(json).eql({
           id: '54735750e16638ba1eee59cb',
+          type: 'users',
           'first-name': 'Sandro',
           'last-name': 'Munda',
           'address': {
             'id': '2e593a7f2c3f2e5fc0b6ea1d4f03a2a3',
+            type: 'address',
             'state': 'Alabama',
             'zip-code': '35801',
             'telephone': null
@@ -692,6 +711,7 @@ describe('JSON API Deserializer', function () {
 
         var json  = new JSONAPIDeserializer().deserialize(dataSet);
         expect(json).eql({
+          type: 'users',
           id: '54735750e16638ba1eee59cb'
         });
         done(null, json);
@@ -709,6 +729,7 @@ describe('JSON API Deserializer', function () {
 
         var json = new JSONAPIDeserializer().deserialize(dataSet);
         expect(json).to.be.eql({
+          type: 'users',
           'first-name': 'Sandro',
           'last-name': 'Munda'
         });
@@ -737,11 +758,13 @@ describe('JSON API Deserializer', function () {
       expect(json).to.be.an('array').with.length(2);
       expect(json[0]).to.be.eql({
         id: '54735750e16638ba1eee59cb',
+        type: 'users',
         'first-name': 'Sandro',
         'last-name': 'Munda'
       });
       expect(json[1]).to.be.eql({
         id: '5490143e69e49d0c8f9fc6bc',
+        type: 'users',
         'first-name': 'Lawrence',
         'last-name': 'Bennett'
       });
@@ -795,14 +818,16 @@ describe('JSON API Deserializer', function () {
       var json = new JSONAPIDeserializer({keyForAttribute: 'snake_case'}).deserialize(dataSet)
 
       expect(json).to.be.an('array').with.length(1);
-      expect(json[0]).to.have.key('id', 'first_name', 'last_name', 'address');
+      expect(json[0]).to.have.key('id', 'type', 'first_name', 'last_name', 'address');
       expect(json[0].address).to.be.eql({
         address_line1: '406 Madison Court',
         zip_code: '49426',
         id: '54735722e16620ba1eee36af',
+        type: 'addresses',
         country: {
           country: 'USA',
           id: '54735722e16609ba1eee36af',
+          type: 'countries',
           address: json[0].address
         }
       });
