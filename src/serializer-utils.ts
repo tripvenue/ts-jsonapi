@@ -113,6 +113,8 @@ export class SerializerUtils {
         return !opts[attr];
       });
     } else {
+      embeds = _.keys(dest);
+
       attributes = _.keys(dest);
     }
 
@@ -123,7 +125,7 @@ export class SerializerUtils {
 
     _.each(embeds, embed => {
       if (this.isComplexType(dest[embed])) {
-        this.serialize(ret, dest, embed, opts[embed]);
+        this.serialize(ret, dest, embed, opts ? opts[embed] : null);
       }
     });
     return ret.attributes;

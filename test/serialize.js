@@ -398,6 +398,49 @@ describe('Options', function () {
       done(null, jsonUnderscoreCase);
     });
 
+    it('should update the key case to underscore_case', function (done) {
+      var nestedData = {
+        id: '1',
+        type: 'user',
+        firstName: 'Sandro',
+        addressLocation: {
+          localityName: {
+            isoCode: 'MSK',
+            fullName: 'Minsk'
+          }
+        },
+        wifeRelation: {
+          firstName: 'Emilia',
+          addressLocation: {
+            localityName: {
+              isoCode: 'MGL',
+              fullName: 'Mogilev'
+            }
+          }
+        }
+      };
+
+      var json = new JSONAPISerializer('user', {
+        attributes: ['firstName', 'addressLocation', 'wifeRelation'],
+        keyForAttribute: 'snake_case'
+      }).serialize(nestedData);
+
+      expect(json.data.attributes).to.be.an('object').eql({
+        'first_name': 'Sandro',
+        'address_location': {
+          'locality_name': { 'iso_code': 'MSK', 'full_name': 'Minsk' }
+        },
+        'wife_relation': {
+          'first_name': 'Emilia',
+          'address_location': {
+            'locality_name': { 'iso_code': 'MGL', 'full_name': 'Mogilev' }
+          }
+        }
+      });
+
+      done(null, json);
+    });
+
     it('should update the key case to CamelCase', function (done) {
       var dataSet = {
         id: '1',
